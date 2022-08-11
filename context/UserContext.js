@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { useUser } from "../auth/hooks";
 
 export const UserContext = createContext(null);
 export const useUserContext = () => {
@@ -10,16 +11,9 @@ export const useUserContext = () => {
 };
 
 export const UserContextProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const savedUser = localStorage.getItem("user");
-    savedUser ? setUser(JSON.parse(savedUser)) : null;
-  }, []);
+  let user = useUser();
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
-      {children}
-    </UserContext.Provider>
+    <UserContext.Provider value={{ user }}>{children}</UserContext.Provider>
   );
 };

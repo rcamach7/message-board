@@ -19,10 +19,6 @@ export const SignInForm = () => {
     console.log(account);
   };
 
-  useEffect(() => {
-    console.log(account);
-  }, [account]);
-
   return (
     <form className="flex flex-col gap-2 w-80" onSubmit={handleSubmit}>
       <p className="pt-5 font-medium">Sign In Please</p>

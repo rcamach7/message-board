@@ -5,8 +5,11 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { SignInForm } from "../components/Forms/SignInForm";
 import { SignUpForm } from "../components/Forms/SignUpForm";
+import { useUser } from "../auth/hooks";
 
 export default function Home() {
+  useUser({ redirectTo: "/", redirectIfFound: true });
+
   const [swapForms, setSwapForms] = useState(false);
   const { user } = useUserContext();
   const router = useRouter();
@@ -14,6 +17,10 @@ export default function Home() {
   const swapForm = () => {
     setSwapForms(!swapForms);
   };
+
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
 
   useEffect(() => {
     if (user) {

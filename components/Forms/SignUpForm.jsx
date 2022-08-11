@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import axios from "axios";
+import Router from "next/router";
 
 export const SignUpForm = () => {
   const [account, setAccount] = useState({
@@ -14,19 +16,28 @@ export const SignUpForm = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (account.password !== account.confirmPassword) {
       alert("Passwords do not match");
       return;
     }
 
-    console.log(account);
+    try {
+      const body = {
+        username: account.username,
+        password: account.password,
+      };
+      const res = axios.post("/api/users", body);
+      if (res.status === 200) {
+        Router.push("/board");
+      } else {
+        throw new Error(await res.text());
+      }
+    } catch (error) {
+      console.error("An unexpected error occurred:", error);
+    }
   };
-
-  useEffect(() => {
-    console.log(account);
-  }, [account]);
 
   return (
     <form className="flex flex-col gap-2 w-80" onSubmit={handleSubmit}>
