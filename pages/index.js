@@ -4,11 +4,16 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { SignInForm } from "../components/Forms/SignInForm";
+import { SignUpForm } from "../components/Forms/SignUpForm";
 
 export default function Home() {
   const [swapForms, setSwapForms] = useState(false);
   const { user } = useUserContext();
   const router = useRouter();
+
+  const swapForm = () => {
+    setSwapForms(!swapForms);
+  };
 
   useEffect(() => {
     if (user) {
@@ -17,7 +22,7 @@ export default function Home() {
   }, [user]);
 
   return (
-    <div className="flex flex-col h-screen items-center justify-center text-center">
+    <div className="flex flex-col h-screen items-center justify-center text-center font-serif p-1">
       <Head>
         <title>Group Chat </title>
         <meta name="description" content="Group chat" />
@@ -32,7 +37,13 @@ export default function Home() {
         alt="logo"
       />
 
-      {swapForms ? null : <SignInForm />}
+      {swapForms ? <SignUpForm /> : <SignInForm />}
+      <button
+        onClick={swapForm}
+        className="text-sm font-extrabold mt-2 p-1 text-blue-400"
+      >
+        {swapForms ? "I have an account already" : "Create New Account"}
+      </button>
     </div>
   );
 }

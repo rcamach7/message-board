@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export const SignInForm = () => {
+export const SignUpForm = () => {
   const [account, setAccount] = useState({
     username: "",
     password: "",
@@ -54,7 +54,7 @@ export const SignInForm = () => {
         type="submit"
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
       >
-        Submit
+        Create Account
       </button>
     </form>
   );
