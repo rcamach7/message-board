@@ -16,6 +16,11 @@ export const SignUpForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (account.password !== account.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
     console.log(account);
   };
 
