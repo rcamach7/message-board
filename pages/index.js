@@ -1,10 +1,12 @@
 import Head from "next/head";
 import { useUserContext } from "../context/UserContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import { SignInForm } from "../components/Forms/SignInForm";
 
 export default function Home() {
+  const [swapForms, setSwapForms] = useState(false);
   const { user } = useUserContext();
   const router = useRouter();
 
@@ -30,27 +32,7 @@ export default function Home() {
         alt="logo"
       />
 
-      <form className="flex flex-col gap-2 w-80">
-        <p className="pt-5 font-medium">Sign Up To Enter</p>
-        <input
-          className="pl-1 text-center border-2 border-gray-400 rounded-lg py-2 px-4 text-lg"
-          type="text"
-          placeholder="Username"
-          required
-        />
-        <input
-          className="pl-1 text-center border-2 border-gray-400 rounded-lg py-2 px-4 text-lg"
-          type="password"
-          placeholder="Password"
-          required
-        />
-        <button
-          type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Submit
-        </button>
-      </form>
+      {swapForms ? null : <SignInForm />}
     </div>
   );
 }
