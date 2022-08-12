@@ -28,7 +28,7 @@ export const SignUpForm = () => {
         username: account.username,
         password: account.password,
       };
-      const res = axios.post("/api/users", body);
+      const res = await axios.post("/api/signup", body);
       if (res.status === 200) {
         Router.push("/board");
       } else {

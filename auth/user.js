@@ -1,5 +1,6 @@
 import User from "../models/user";
 import crypto from "crypto";
+import connectMongo from "../utils/connectMongo";
 
 export async function createUser({ username, password }) {
   const salt = crypto.randomBytes(16).toString("hex");
@@ -7,6 +8,7 @@ export async function createUser({ username, password }) {
     .pbkdf2Sync(password, salt, 1000, 64, "sha512")
     .toString("hex");
 
+  await connectMongo();
   const user = new User({
     username,
     password: hashedPassword,
@@ -19,6 +21,7 @@ export async function createUser({ username, password }) {
 }
 
 export async function findUser({ username }) {
+  await connectMongo();
   const user = await User.findOne({ username });
 
   return user;
