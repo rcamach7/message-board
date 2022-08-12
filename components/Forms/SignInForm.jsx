@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useUser } from "../../auth/hooks";
+import { useUser } from "../../auth/useUser";
 import Router from "next/router";
 import axios from "axios";
 

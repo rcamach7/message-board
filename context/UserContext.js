@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { useUser } from "../auth/hooks";
+import { useUser } from "../auth/useUser";
 
 export const UserContext = createContext(null);
 export const useUserContext = () => {

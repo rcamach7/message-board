@@ -5,28 +5,16 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { SignInForm } from "../components/Forms/SignInForm";
 import { SignUpForm } from "../components/Forms/SignUpForm";
-import { useUser } from "../auth/hooks";
+import { useUser } from "../auth/useUser";
 
 export default function Home() {
-  useUser({ redirectTo: "/", redirectIfFound: true });
+  useUser({ redirectTo: "/board", redirectIfFound: true });
 
   const [swapForms, setSwapForms] = useState(false);
-  const { user } = useUserContext();
-  const router = useRouter();
 
   const swapForm = () => {
     setSwapForms(!swapForms);
   };
-
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
-
-  useEffect(() => {
-    if (user) {
-      router.push("/board");
-    }
-  }, [user]);
 
   return (
     <div className="flex flex-col h-screen items-center justify-center text-center font-serif p-1">
