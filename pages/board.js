@@ -1,12 +1,28 @@
 import { useUser } from "../auth/useUser";
 import axios from "axios";
 import Router from "next/router";
+import { Loading } from "../components/Loading";
+import { useEffect, useState } from "react";
 
 export default function Board() {
+  const [showLoading, setShowLoading] = useState(false);
+  const user = useUser();
+
   const logout = async () => {
-    await axios.get("/api/logout");
-    Router.push("/");
+    setShowLoading(true);
+    try {
+      await axios.get("/api/logout");
+    } catch (e) {
+      console.error(e);
+      setShowLoading(false);
+    }
   };
+
+  useEffect(() => {
+    if (!user) {
+      Router.push("/");
+    }
+  }, [user]);
 
   return (
     <div className="Board h-screen w-screen flex flex-col">
@@ -33,6 +49,8 @@ export default function Board() {
           Send
         </button>
       </form>
+
+      {showLoading && <Loading />}
     </div>
   );
 }

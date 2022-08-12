@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { useUserContext } from "../context/UserContext";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import Router from "next/router";
 import Image from "next/image";
 import { SignInForm } from "../components/Forms/SignInForm";
 import { SignUpForm } from "../components/Forms/SignUpForm";
@@ -9,7 +9,11 @@ import { useUser } from "../auth/useUser";
 import { Loading } from "../components/Loading";
 
 export default function Home() {
-  useUser({ redirectTo: "/board", redirectIfFound: true });
+  const user = useUser();
+
+  if (user) {
+    Router.push("/board");
+  }
 
   const [loading, setLoading] = useState(true);
   const [swapForms, setSwapForms] = useState(false);
