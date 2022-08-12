@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useUser } from "../../auth/useUser";
 import Router from "next/router";
 import axios from "axios";
+import { Loading } from "../Loading";
 
 export const SignInForm = () => {
   useUser({ redirectTo: "/", redirectIfFound: true });
@@ -9,6 +10,7 @@ export const SignInForm = () => {
     username: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setAccount({
@@ -19,7 +21,7 @@ export const SignInForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     try {
       const res = await axios.post("/api/login", account);
       if (res.status === 200) {
@@ -28,8 +30,10 @@ export const SignInForm = () => {
         throw new Error(await res.text());
       }
     } catch (error) {
+      setLoading(false);
       console.error("An unexpected error occurred", error);
     }
+    setLoading(false);
   };
 
   return (
@@ -57,6 +61,8 @@ export const SignInForm = () => {
       >
         Sign In
       </button>
+
+      {loading && <Loading />}
     </form>
   );
 };

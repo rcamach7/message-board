@@ -1,11 +1,13 @@
 import { useUser } from "../auth/useUser";
 import axios from "axios";
+import Router from "next/router";
 
 export default function Board() {
-  const user = useUser({ redirectTo: "/", redirectIfFound: false });
+  const user = useUser({ redirectTo: "/" });
 
   const logout = async () => {
     await axios.get("/api/logout");
+    Router.push("/");
   };
 
   return (

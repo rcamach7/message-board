@@ -6,10 +6,12 @@ import Image from "next/image";
 import { SignInForm } from "../components/Forms/SignInForm";
 import { SignUpForm } from "../components/Forms/SignUpForm";
 import { useUser } from "../auth/useUser";
+import { Loading } from "../components/Loading";
 
 export default function Home() {
   useUser({ redirectTo: "/board", redirectIfFound: true });
 
+  const [loading, setLoading] = useState(true);
   const [swapForms, setSwapForms] = useState(false);
 
   const swapForm = () => {

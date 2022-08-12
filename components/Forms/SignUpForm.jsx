@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import Router from "next/router";
+import { Loading } from "../Loading";
 
 export const SignUpForm = () => {
   const [account, setAccount] = useState({
@@ -8,6 +9,7 @@ export const SignUpForm = () => {
     password: "",
     confirmPassword: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setAccount({
@@ -18,8 +20,10 @@ export const SignUpForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     if (account.password !== account.confirmPassword) {
       alert("Passwords do not match");
+      setLoading(false);
       return;
     }
 
@@ -34,8 +38,10 @@ export const SignUpForm = () => {
       } else {
         throw new Error(await res.text());
       }
+      setLoading(false);
     } catch (error) {
       console.error("An unexpected error occurred:", error);
+      setLoading(false);
     }
   };
 
@@ -72,6 +78,8 @@ export const SignUpForm = () => {
       >
         Create Account
       </button>
+
+      {loading && <Loading />}
     </form>
   );
 };
