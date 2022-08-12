@@ -19,6 +19,7 @@
     "mongodb": "^4.8.1",
     "mongoose": "^6.5.2",
     "next": "12.2.4",
+    "next-connect": "^0.13.0",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "react": "18.2.0",

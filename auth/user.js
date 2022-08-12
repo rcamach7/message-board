@@ -8,13 +8,13 @@ export async function createUser({ username, password }) {
     .pbkdf2Sync(password, salt, 1000, 64, "sha512")
     .toString("hex");
 
-  await connectMongo();
   const user = new User({
     username,
     password: hashedPassword,
     salt,
     messages: [],
   });
+  await connectMongo();
   await user.save();
 
   return user;

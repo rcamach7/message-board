@@ -1,7 +1,7 @@
 import passport from "passport";
 import nextConnect from "next-connect";
 import { localStrategy } from "../../auth/password-local";
-import { setLoginSession } from "../../auth/loginSession";
+import { setLoginSession } from "../../auth/auth";
 
 const authenticate = (method, req, res) =>
   new Promise((resolve, reject) => {

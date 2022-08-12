@@ -1,6 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useUser } from "../../auth/hooks";
+import Router from "next/router";
+import axios from "axios";
 
 export const SignInForm = () => {
+  useUser({ redirectTo: "/", redirectIfFound: true });
   const [account, setAccount] = useState({
     username: "",
     password: "",
@@ -13,10 +17,19 @@ export const SignInForm = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(account);
+    try {
+      const res = await axios.post("/api/login", account);
+      if (res.status === 200) {
+        Router.push("/board");
+      } else {
+        throw new Error(await res.text());
+      }
+    } catch (error) {
+      console.error("An unexpected error occurred", error);
+    }
   };
 
   return (
