@@ -1,12 +1,9 @@
-import { useUser } from "../auth/useUser";
 import axios from "axios";
-import Router from "next/router";
 import { Loading } from "../components/Loading";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function Board() {
   const [showLoading, setShowLoading] = useState(false);
-  const user = useUser();
 
   const logout = async () => {
     setShowLoading(true);
@@ -17,12 +14,6 @@ export default function Board() {
       setShowLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (!user) {
-      Router.push("/");
-    }
-  }, [user]);
 
   return (
     <div className="Board h-screen w-screen flex flex-col">

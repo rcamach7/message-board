@@ -1,26 +1,29 @@
 import Head from "next/head";
-import { useUserContext } from "../context/UserContext";
-import { useEffect, useState } from "react";
-import Router from "next/router";
+import { useState } from "react";
 import Image from "next/image";
-import { SignInForm } from "../components/Forms/SignInForm";
-import { SignUpForm } from "../components/Forms/SignUpForm";
-import { useUser } from "../auth/useUser";
-import { Loading } from "../components/Loading";
+import { useSession, signIn, signOut } from "next-auth/react";
+import { useEffect } from "react";
+import axios from "axios";
 
 export default function Home() {
-  const user = useUser();
-
-  if (user) {
-    Router.push("/board");
-  }
-
-  const [loading, setLoading] = useState(true);
   const [swapForms, setSwapForms] = useState(false);
+  const { data: session } = useSession();
 
   const swapForm = () => {
     setSwapForms(!swapForms);
   };
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const { data } = await axios.get("/api/messages");
+        console.log(data);
+      } catch (error) {
+        console.error("Error happened while fetching: ", error);
+      }
+    };
+    fetch();
+  }, []);
 
   return (
     <div className="flex flex-col h-screen items-center justify-center text-center font-serif p-1">
@@ -38,13 +41,14 @@ export default function Home() {
         alt="logo"
       />
 
-      {swapForms ? <SignUpForm /> : <SignInForm />}
-      <button
-        onClick={swapForm}
-        className="text-sm font-extrabold mt-2 p-1 text-blue-400"
-      >
-        {swapForms ? "I have an account already" : "Create New Account"}
-      </button>
+      {session ? (
+        <div>
+          <p>Email: {session.user.email}</p>
+          <button onClick={() => signOut()}>Sign Out</button>
+        </div>
+      ) : (
+        <p onClick={() => signIn()}>Sign In</p>
+      )}
     </div>
   );
 }
