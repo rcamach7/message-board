@@ -1,26 +1,25 @@
-import axios from "axios";
 import { Loading } from "../components/Loading";
-import { useState } from "react";
+import { useSession, signOut } from "next-auth/react";
+import { useRouter } from "next/router";
 
 export default function Board() {
-  const [showLoading, setShowLoading] = useState(false);
+  const router = useRouter();
+  const { status } = useSession({
+    required: true,
+    onUnauthenticated() {
+      router.push("/");
+    },
+  });
 
-  const logout = async () => {
-    setShowLoading(true);
-    try {
-      await axios.get("/api/logout");
-    } catch (e) {
-      console.error(e);
-      setShowLoading(false);
-    }
-  };
-
+  if (status === "loading") {
+    return <Loading />;
+  }
   return (
     <div className="Board h-screen w-screen flex flex-col">
       <nav className="navBar flex items-center text-center bg-slate-400 font-bold">
         <h1 className="flex-1">Message Board</h1>
         <button
-          onClick={logout}
+          onClick={signOut}
           className="logoutBtn p-2 border-l-2 border-cyan-900"
         >
           Logout
@@ -40,8 +39,6 @@ export default function Board() {
           Send
         </button>
       </form>
-
-      {showLoading && <Loading />}
     </div>
   );
 }

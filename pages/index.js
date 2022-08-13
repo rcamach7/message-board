@@ -1,29 +1,19 @@
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useSession, signIn, signOut } from "next-auth/react";
-import { useEffect } from "react";
-import axios from "axios";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function Home() {
-  const [swapForms, setSwapForms] = useState(false);
+  const router = useRouter();
   const { data: session } = useSession();
 
-  const swapForm = () => {
-    setSwapForms(!swapForms);
-  };
-
   useEffect(() => {
-    const fetch = async () => {
-      try {
-        const { data } = await axios.get("/api/messages");
-        console.log(data);
-      } catch (error) {
-        console.error("Error happened while fetching: ", error);
-      }
-    };
-    fetch();
-  }, []);
+    if (session?.user) {
+      router.push("/board");
+    }
+  }, [session]);
 
   return (
     <div className="flex flex-col h-screen items-center justify-center text-center font-serif p-1">
@@ -41,13 +31,18 @@ export default function Home() {
         alt="logo"
       />
 
+      <Link className="boardLink font-bold" href="/board">
+        Go to message board
+      </Link>
+
       {session ? (
-        <div>
-          <p>Email: {session.user.email}</p>
+        <div className="signInStatus p-5">
           <button onClick={() => signOut()}>Sign Out</button>
         </div>
       ) : (
-        <p onClick={() => signIn()}>Sign In</p>
+        <p className="p-5" onClick={() => signIn()}>
+          Sign In
+        </p>
       )}
     </div>
   );
