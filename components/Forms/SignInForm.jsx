@@ -1,11 +1,9 @@
 import { useState } from "react";
-import { useUser } from "../../auth/useUser";
 import Router from "next/router";
 import axios from "axios";
 import { Loading } from "../Loading";
 
 export const SignInForm = () => {
-  useUser({ redirectTo: "/", redirectIfFound: true });
   const [account, setAccount] = useState({
     username: "",
     password: "",

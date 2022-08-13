@@ -1,5 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
-import { useUser } from "../auth/useUser";
+import { createContext, useContext } from "react";
 
 export const UserContext = createContext(null);
 export const useUserContext = () => {
@@ -11,9 +10,5 @@ export const useUserContext = () => {
 };
 
 export const UserContextProvider = ({ children }) => {
-  let user = useUser();
-
-  return (
-    <UserContext.Provider value={{ user }}>{children}</UserContext.Provider>
-  );
+  return <UserContext.Provider value={{}}>{children}</UserContext.Provider>;
 };
