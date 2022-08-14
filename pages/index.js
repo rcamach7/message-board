@@ -1,5 +1,4 @@
 import Head from "next/head";
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useSession, signIn, signOut } from "next-auth/react";
 import Link from "next/link";
@@ -9,11 +8,7 @@ export default function Home() {
   const router = useRouter();
   const { data: session } = useSession();
 
-  useEffect(() => {
-    if (session?.user) {
-      router.push("/board");
-    }
-  }, [session]);
+  session?.user && router.push("/board");
 
   return (
     <div className="flex flex-col h-screen items-center justify-center text-center font-serif p-1">

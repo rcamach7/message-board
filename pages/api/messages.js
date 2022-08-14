@@ -1,10 +1,25 @@
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "./auth/[...nextauth]";
+import { getMessages } from "../../controllers/messagesController";
 
 export default async (req, res) => {
   const session = await unstable_getServerSession(req, res, authOptions);
-  // Protected API endpoint
   if (!session) res.status(401).json({ message: "Unauthorized" });
 
-  res.json({ messages: [{ message: "Hello World" }] });
+  const { method } = req;
+  switch (method) {
+    case "GET":
+      try {
+        const messages = await getMessages();
+        res.json({ messages });
+      } catch (error) {
+        res.status(500).json({ message: "Error retrieving messages" });
+      }
+      break;
+    case "POST":
+      break;
+    default:
+      res.setHeader("Allow", ["GET", "POST"]);
+      res.status(405).end(`Method ${method} Not Allowed`);
+  }
 };

@@ -1,8 +1,9 @@
 import { Loading } from "../components/Loading";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
+import { getMessages } from "../controllers/messagesController";
 
-export default function Board() {
+export default function Board({ messages }) {
   const router = useRouter();
   const { status } = useSession({
     required: true,
@@ -41,4 +42,13 @@ export default function Board() {
       </form>
     </div>
   );
+}
+
+export async function getServerSideProps() {
+  const messages = await getMessages();
+  return {
+    props: {
+      messages,
+    },
+  };
 }
