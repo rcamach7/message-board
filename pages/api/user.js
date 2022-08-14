@@ -1,6 +1,9 @@
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "./auth/[...nextauth]";
-import { getMessages, postMessage } from "../../controllers/messagesController";
+import {
+  getUserByEmail,
+  addUserMessage,
+} from "../../controllers/userController";
 
 export default async (req, res) => {
   const session = await unstable_getServerSession(req, res, authOptions);
@@ -10,24 +13,22 @@ export default async (req, res) => {
   switch (method) {
     case "GET":
       try {
-        const messages = await getMessages();
-        res.json({ messages });
+        const user = await getUserByEmail(session.user.email);
+        res.json({ user });
       } catch (error) {
-        res.status(500).json({ message: "Error retrieving messages" });
+        res.status(500).json({ message: "Error retrieving user" });
       }
       break;
     case "POST":
       try {
-        await postMessage(session.user.email, req.body.message);
-        const messages = await getMessages();
-
-        res.json({ messages });
+        const user = await addUserMessage(session.user.email, req.body.message);
+        res.json({ user });
       } catch (error) {
-        res.status(500).json({ message: "Error posting new message" });
+        res.status(500).json({ message: "Error adding message to user" });
       }
       break;
     default:
-      res.setHeader("Allow", ["GET", "POST"]);
+      res.setHeader("Allow", ["GET"]);
       res.status(405).end(`Method ${method} Not Allowed`);
   }
 };

@@ -1,7 +1,7 @@
 import { Schema, model, models } from "mongoose";
 
 const userSchema = new Schema({
-  username: { type: String, required: true, minLength: 4 },
+  name: { type: String, required: true, minLength: 4 },
   email: { type: String, required: true, minLength: 4 },
   image: { type: String, required: true, minLength: 4 },
   messages: [
@@ -10,6 +10,7 @@ const userSchema = new Schema({
       timeStamp: { type: Date, required: true },
     },
   ],
+  emailVerified: { type: Boolean, required: true },
 });
 
 const User = models.User || model("User", userSchema);
