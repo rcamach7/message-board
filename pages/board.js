@@ -1,7 +1,6 @@
 import { Loading } from "../components/Loading";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
-import { getMessages } from "../controllers/messagesController";
 import { useState } from "react";
 import axios from "axios";
 
@@ -31,6 +30,15 @@ export default function Board({ messages }) {
     }
   };
 
+  const getUser = async () => {
+    try {
+      const { data } = await axios.get("/api/user");
+      console.log(data.user);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   if (status === "loading") {
     return <Loading />;
   }
@@ -48,7 +56,7 @@ export default function Board({ messages }) {
       </nav>
 
       <div className="messageContainer flex flex-col flex-1">
-        <p>This is the message container</p>
+        <button onClick={() => getUser()}>Print All Users</button>
       </div>
 
       <form className="newMessage flex p-2" onSubmit={handleSubmit}>
@@ -65,11 +73,11 @@ export default function Board({ messages }) {
   );
 }
 
-export async function getServerSideProps() {
-  const messages = await getMessages();
-  return {
-    props: {
-      messages,
-    },
-  };
-}
+// export async function getServerSideProps() {
+//   const messages = await getMessages();
+//   return {
+//     props: {
+//       messages,
+//     },
+//   };
+// }

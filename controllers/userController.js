@@ -1,26 +1,24 @@
 import User from "../models/User";
 import connectMongo from "../utils/connectMongo";
 
-export const getUsers = async (req, res) => {
+export const getUsers = async () => {
   try {
     await connectMongo();
     const users = await User.find({});
 
-    res.json({ users });
+    return Promise.resolve(users);
   } catch (error) {
-    res.status(500).json({ message: "Error getting users" });
+    return Promise.reject(error);
   }
 };
 
-export const getUser = async (req, res) => {
-  const { query } = req;
-  const { id } = query;
-
+export const getUserByEmail = async (email) => {
   try {
     await connectMongo();
-    const user = await User.findById(id);
-    res.json(user);
+    const user = await User.findOne({ email });
+
+    return Promise.resolve(user);
   } catch (error) {
-    res.status(500).json({ message: "Error getting user" });
+    return Promise.reject(error);
   }
 };

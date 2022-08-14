@@ -6,6 +6,6 @@ const boardMessageSchema = new Schema({
 });
 
 const BoardMessage =
-  models.BoardMessage || model("BoardMessage", boardMessageSchema);
+  models?.BoardMessage || model("BoardMessage", boardMessageSchema);
 
 export default BoardMessage;
