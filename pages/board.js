@@ -30,9 +30,9 @@ export default function Board({ messages }) {
     }
   };
 
-  const getUser = async () => {
+  const doSomething = async () => {
     try {
-      const { data } = await axios.get("/api/user");
+      const { data } = await axios.post("/api/user", { message: "Hello" });
       console.log(data.user);
     } catch (error) {
       console.log(error);
@@ -56,7 +56,7 @@ export default function Board({ messages }) {
       </nav>
 
       <div className="messageContainer flex flex-col flex-1">
-        <button onClick={() => getUser()}>Print All Users</button>
+        <button onClick={() => doSomething()}>Post message to user</button>
       </div>
 
       <form className="newMessage flex p-2" onSubmit={handleSubmit}>

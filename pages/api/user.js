@@ -1,6 +1,9 @@
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "./auth/[...nextauth]";
-import { getUsers, getUserByEmail } from "../../controllers/userController";
+import {
+  getUserByEmail,
+  addUserMessage,
+} from "../../controllers/userController";
 
 export default async (req, res) => {
   const session = await unstable_getServerSession(req, res, authOptions);
@@ -14,6 +17,14 @@ export default async (req, res) => {
         res.json({ user });
       } catch (error) {
         res.status(500).json({ message: "Error retrieving user" });
+      }
+      break;
+    case "POST":
+      try {
+        const user = await addUserMessage(session.user.email, req.body.message);
+        res.json({ user });
+      } catch (error) {
+        res.status(500).json({ message: "Error adding message to user" });
       }
       break;
     default:

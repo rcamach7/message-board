@@ -4,7 +4,6 @@ import { getMessages, postMessage } from "../../controllers/messagesController";
 
 export default async (req, res) => {
   const session = await unstable_getServerSession(req, res, authOptions);
-  console.log("session: ", session);
   if (!session) res.status(401).json({ message: "Unauthorized" });
 
   const { method } = req;
@@ -19,7 +18,7 @@ export default async (req, res) => {
       break;
     case "POST":
       try {
-        await postMessage(req.body.message);
+        await postMessage(session.user.email, req.body.message);
         const messages = await getMessages();
 
         res.json({ messages });
