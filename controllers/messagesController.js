@@ -9,7 +9,7 @@ export const getMessages = async () => {
       .populate({
         path: "user",
         model: "User",
-        select: ["email", "name", "image"],
+        select: ["email", "image"],
       })
       .sort({ timeStamp: -1 });
 

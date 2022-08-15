@@ -1,7 +1,7 @@
 import { Loading } from "../components/Loading";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { getMessages } from "../controllers/messagesController";
 import { MessageCard } from "../components/MessageCard";
@@ -15,12 +15,16 @@ export default function Board({ messages, email }) {
   const [message, setMessage] = useState("");
 
   const router = useRouter();
-  const { status } = useSession({
+  const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
       router.push("/");
     },
   });
+
+  useEffect(() => {
+    console.log(session?.user);
+  }, [session]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -50,7 +54,7 @@ export default function Board({ messages, email }) {
         </button>
       </nav>
 
-      <div className="messageContainer flex flex-col flex-1 p-3">
+      <div className="messageContainer flex flex-col flex-1 p-3 justify-end">
         {messagesCollection.map((message) => (
           <MessageCard
             key={message._id}
@@ -85,7 +89,7 @@ export async function getServerSideProps(context) {
   return {
     props: {
       messages: JSON.stringify(messages),
-      email: session.user.email,
+      email: session ? session.user.email : null,
     },
   };
 }
