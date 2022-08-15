@@ -10,7 +10,7 @@ import { authOptions } from "./api/auth/[...nextauth]";
 
 export default function Board({ messages, email }) {
   const [messagesCollection, setMessagesCollection] = useState([
-    ...JSON.parse(messages),
+    ...JSON.parse(messages).reverse(),
   ]);
   const [message, setMessage] = useState("");
 
@@ -22,10 +22,6 @@ export default function Board({ messages, email }) {
     },
   });
 
-  useEffect(() => {
-    console.log(session?.user);
-  }, [session]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!message.length) return;
@@ -34,7 +30,7 @@ export default function Board({ messages, email }) {
         message,
       });
 
-      setMessagesCollection(messages);
+      setMessagesCollection(messages.reverse());
       setMessage("");
     } catch (error) {
       console.log(error);
@@ -54,7 +50,7 @@ export default function Board({ messages, email }) {
         </button>
       </nav>
 
-      <div className="messageContainer flex flex-col flex-1 p-3 justify-end">
+      <div className="messageContainer flex flex-col flex-1 p-3 justify-end gap-2">
         {messagesCollection.map((message) => (
           <MessageCard
             key={message._id}
@@ -67,8 +63,9 @@ export default function Board({ messages, email }) {
       <form className="newMessage flex p-2" onSubmit={handleSubmit}>
         <input
           onChange={(e) => setMessage(e.target.value)}
+          value={message}
           type="text"
-          className="messageInput grow pl-1 text-center border-2 border-gray-400 rounded-lg py-2 px-4 text-lg"
+          className="messageInput grow pl-4 border-2 border-gray-400 rounded-lg py-2 px-4 text-lg"
         />
         <button className="sendBtn flex-1 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded m-1">
           Send
