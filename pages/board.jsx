@@ -1,10 +1,15 @@
 import { Loading } from "../components/Loading";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
+import { getMessages } from "../controllers/messagesController";
+import { Message } from "../components/Message";
 
 export default function Board({ messages }) {
+  const [messagesCollection, setMessagesCollection] = useState([
+    ...JSON.parse(messages),
+  ]);
   const [message, setMessage] = useState("");
 
   const router = useRouter();
@@ -19,30 +24,23 @@ export default function Board({ messages }) {
     e.preventDefault();
     if (!message.length) return;
     try {
-      const { data } = await axios.post("/api/messages", {
+      const { data: messages } = await axios.post("/api/messages", {
         message,
       });
+      console.log(messages);
 
+      setMessagesCollection(messages);
       setMessage("");
-      console.table(data.messages);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const doSomething = async () => {
-    try {
-      const { data } = await axios.post("/api/user", { message: "Hello" });
-      console.log(data.user);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  useEffect(() => {
+    console.log(messagesCollection);
+  }, [messagesCollection]);
 
-  if (status === "loading") {
-    return <Loading />;
-  }
-
+  if (status === "loading") return <Loading />;
   return (
     <div className="Board h-screen w-screen flex flex-col">
       <nav className="navBar flex items-center text-center bg-slate-400 font-bold">
@@ -56,7 +54,9 @@ export default function Board({ messages }) {
       </nav>
 
       <div className="messageContainer flex flex-col flex-1">
-        <button onClick={() => doSomething()}>Post message to user</button>
+        {messagesCollection.map((message) => (
+          <Message key={message._id} message={message} />
+        ))}
       </div>
 
       <form className="newMessage flex p-2" onSubmit={handleSubmit}>
@@ -73,11 +73,12 @@ export default function Board({ messages }) {
   );
 }
 
-// export async function getServerSideProps() {
-//   const messages = await getMessages();
-//   return {
-//     props: {
-//       messages,
-//     },
-//   };
-// }
+export async function getServerSideProps() {
+  const messages = await getMessages();
+  // serialize the messages array to JSON and store it in the props object
+  return {
+    props: {
+      messages: JSON.stringify(messages),
+    },
+  };
+}

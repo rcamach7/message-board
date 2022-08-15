@@ -43,7 +43,6 @@ export const addUserMessage = async (email, message) => {
     return Promise.resolve(user);
   } catch (error) {
     console.log(error);
-    console.log(error);
     return Promise.reject(error);
   }
 };
