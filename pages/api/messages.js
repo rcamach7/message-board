@@ -21,7 +21,7 @@ export default async (req, res) => {
         await postMessage(session.user.email, req.body.message);
         const messages = await getMessages();
 
-        res.json({ messages });
+        res.json(messages);
       } catch (error) {
         res.status(500).json({ message: "Error posting new message" });
       }
