@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { getMessages } from "../controllers/messagesController";
-import { Message } from "../components/Message";
+import { MessageCard } from "../components/MessageCard";
 
 export default function Board({ messages }) {
   const [messagesCollection, setMessagesCollection] = useState([
@@ -36,9 +36,9 @@ export default function Board({ messages }) {
     }
   };
 
-  useEffect(() => {
-    console.log(messagesCollection);
-  }, [messagesCollection]);
+  // useEffect(() => {
+  //   console.log(messagesCollection);
+  // }, [messagesCollection]);
 
   if (status === "loading") return <Loading />;
   return (
@@ -53,9 +53,9 @@ export default function Board({ messages }) {
         </button>
       </nav>
 
-      <div className="messageContainer flex flex-col flex-1">
+      <div className="messageContainer flex flex-col flex-1 p-3">
         {messagesCollection.map((message) => (
-          <Message key={message._id} message={message} />
+          <MessageCard key={message._id} message={message} />
         ))}
       </div>
 

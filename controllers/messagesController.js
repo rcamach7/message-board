@@ -5,7 +5,13 @@ import { getUserByEmail, addUserMessage } from "./userController";
 export const getMessages = async () => {
   try {
     await connectMongo();
-    const messages = await BoardMessage.find({});
+    const messages = await BoardMessage.find()
+      .populate({
+        path: "user",
+        model: "User",
+        select: ["email", "name", "image"],
+      })
+      .sort({ timeStamp: -1 });
 
     return Promise.resolve(messages);
   } catch (error) {
