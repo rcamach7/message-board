@@ -1,7 +1,7 @@
 import { Loading } from "../components/Loading";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { getMessages } from "../controllers/messagesController";
 import { MessageCard } from "../components/MessageCard";
@@ -15,7 +15,7 @@ export default function Board({ messages, email }) {
   const [message, setMessage] = useState("");
 
   const router = useRouter();
-  const { data: session, status } = useSession({
+  const { status } = useSession({
     required: true,
     onUnauthenticated() {
       router.push("/");
