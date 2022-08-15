@@ -1,11 +1,11 @@
 import React from "react";
 import Image from "next/image";
+import { useEffect } from "react";
 
-export const MessageCard = ({ message }) => {
+export const MessageCard = ({ message, currentUser }) => {
   const { _id, text, timeStamp } = message;
   const { name, image, email } = message.user;
 
-  console.log(message);
   return (
     <div className="messageCard flex">
       <Image

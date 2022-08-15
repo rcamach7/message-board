@@ -1,12 +1,14 @@
 import { Loading } from "../components/Loading";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { getMessages } from "../controllers/messagesController";
 import { MessageCard } from "../components/MessageCard";
+import { unstable_getServerSession } from "next-auth/next";
+import { authOptions } from "./api/auth/[...nextauth]";
 
-export default function Board({ messages }) {
+export default function Board({ messages, email }) {
   const [messagesCollection, setMessagesCollection] = useState([
     ...JSON.parse(messages),
   ]);
@@ -27,7 +29,6 @@ export default function Board({ messages }) {
       const { data: messages } = await axios.post("/api/messages", {
         message,
       });
-      console.log(messages);
 
       setMessagesCollection(messages);
       setMessage("");
@@ -35,10 +36,6 @@ export default function Board({ messages }) {
       console.log(error);
     }
   };
-
-  // useEffect(() => {
-  //   console.log(messagesCollection);
-  // }, [messagesCollection]);
 
   if (status === "loading") return <Loading />;
   return (
@@ -55,7 +52,11 @@ export default function Board({ messages }) {
 
       <div className="messageContainer flex flex-col flex-1 p-3">
         {messagesCollection.map((message) => (
-          <MessageCard key={message._id} message={message} />
+          <MessageCard
+            key={message._id}
+            message={message}
+            currentUser={email === message.user.email}
+          />
         ))}
       </div>
 
@@ -73,12 +74,18 @@ export default function Board({ messages }) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
+  const session = await unstable_getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  );
   const messages = await getMessages();
-  // serialize the messages array to JSON and store it in the props object
+
   return {
     props: {
       messages: JSON.stringify(messages),
+      email: session.user.email,
     },
   };
 }
