@@ -50,7 +50,7 @@ export default function Board({ messages, email }) {
         </button>
       </nav>
 
-      <div className="messageContainer flex flex-col flex-1 p-3 justify-end gap-2">
+      <div className="messageContainer flex flex-col flex-1 p-3 justify-end gap-2 overflow-scroll">
         {messagesCollection.map((message) => (
           <MessageCard
             key={message._id}

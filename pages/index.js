@@ -1,15 +1,16 @@
 import Head from "next/head";
 import Image from "next/image";
-import { useSession, signIn, signOut } from "next-auth/react";
-import Link from "next/link";
+import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/router";
+import { Loading } from "../components/Loading";
 
 export default function Home() {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { status, data: session } = useSession();
 
   session?.user && router.push("/board");
 
+  if (status === "loading") return <Loading />;
   return (
     <div className="flex flex-col h-screen items-center justify-center text-center font-serif p-1">
       <Head>
@@ -17,7 +18,7 @@ export default function Home() {
         <meta name="description" content="Group chat" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h1 className="text-3xl font-bold pb-9">Anonymous Group Chat Board</h1>
+      <h1 className="text-3xl font-bold pb-9">Group Message Board</h1>
       <Image
         className="rounded-3xl"
         src="/logo.png"
@@ -26,19 +27,12 @@ export default function Home() {
         alt="logo"
       />
 
-      <Link className="boardLink font-bold" href="/board">
-        Go to message board
-      </Link>
-
-      {session ? (
-        <div className="signInStatus p-5">
-          <button onClick={() => signOut()}>Sign Out</button>
-        </div>
-      ) : (
-        <p className="p-5" onClick={() => signIn()}>
-          Sign In
-        </p>
-      )}
+      <p
+        className="p-3 mt-10 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded m-1"
+        onClick={() => signIn()}
+      >
+        Sign In
+      </p>
     </div>
   );
 }
