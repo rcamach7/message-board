@@ -3,27 +3,10 @@ import Image from "next/image";
 import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { Loading } from "../components/Loading";
-import { useEffect } from "react";
-import io from "socket.io-client";
-import axios from "axios";
 
-let socket;
 export default function Home() {
   const router = useRouter();
   const { status, data: session } = useSession();
-
-  useEffect(() => {
-    socketInitializer();
-  }, []);
-
-  const socketInitializer = async () => {
-    await axios.get("/api/socket");
-    socket = io();
-
-    socket.on("connect", () => {
-      console.log("connected");
-    });
-  };
 
   session?.user && router.push("/board");
 

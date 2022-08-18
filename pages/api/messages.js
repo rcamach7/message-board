@@ -11,7 +11,7 @@ export default async (req, res) => {
     case "GET":
       try {
         const messages = await getMessages();
-        res.json({ messages });
+        res.json(messages);
       } catch (error) {
         res.status(500).json({ message: "Error retrieving messages" });
       }
