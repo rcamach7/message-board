@@ -7,12 +7,14 @@ import { getMessages } from "../controllers/messagesController";
 import { MessageCard } from "../components/MessageCard";
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
+import { useSocketIO } from "../lib/useSocketIO";
 
 export default function Board({ messages, email }) {
   const [messagesCollection, setMessagesCollection] = useState([
     ...JSON.parse(messages).reverse(),
   ]);
   const [message, setMessage] = useState("");
+  const socket = useSocketIO(setMessagesCollection);
 
   const router = useRouter();
   const { status } = useSession({
@@ -26,11 +28,10 @@ export default function Board({ messages, email }) {
     e.preventDefault();
     if (!message.length) return;
     try {
-      const { data: messages } = await axios.post("/api/messages", {
+      await axios.post("/api/messages", {
         message,
       });
-
-      setMessagesCollection(messages.reverse());
+      socket.emit("new-message");
       setMessage("");
     } catch (error) {
       console.log(error);
